@@ -10,3 +10,9 @@
 */
 
 require "vendor/autoload.php";
+
+use Danny\WordPress\Rss\RssReader;
+
+$rssReader = RssReader::getInstance();
+
+//$rssReader->registerHooks();
