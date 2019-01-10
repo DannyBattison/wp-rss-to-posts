@@ -8,3 +8,5 @@
 	Author URI: https://danny.gg
 	License: GPL2
 */
+
+require "vendor/autoload.php";
