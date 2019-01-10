@@ -1,0 +1,5 @@
+{
+    "require": {
+        "debril/feed-io": "^4.3"
+    }
+}
