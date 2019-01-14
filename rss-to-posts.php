@@ -12,7 +12,10 @@
 require "vendor/autoload.php";
 
 use Danny\WordPress\Rss\RssReader;
+use Danny\WordPress\Rss\Admin;
 
 $rssReader = RssReader::getInstance();
-
 $rssReader->registerHooks();
+
+$admin = Admin::getInstance();
+$admin->registerHooks();
