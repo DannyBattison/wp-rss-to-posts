@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Tab, Row, Col, Nav, NavItem } from 'react-bootstrap';
+import RssFeed from './RssFeed';
 
 class Rss2Posts extends Component {
   render() {
@@ -16,8 +17,8 @@ class Rss2Posts extends Component {
             </Col>
             <Col sm={8} lg={10}>
               <Tab.Content animation>
-                <Tab.Pane eventKey="first">Tab 1 content</Tab.Pane>
-                <Tab.Pane eventKey="second">Tab 2 content</Tab.Pane>
+                <Tab.Pane eventKey="first"><RssFeed/></Tab.Pane>
+                <Tab.Pane eventKey="second"><RssFeed/></Tab.Pane>
               </Tab.Content>
             </Col>
           </Row>
