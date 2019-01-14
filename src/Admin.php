@@ -4,6 +4,8 @@ namespace Danny\WordPress\Rss;
 
 class Admin
 {
+    const JS_PATH = '../admin/build/static/js/';
+
     /** @var RssReader|null */
     private static $adminPage = null;
 
@@ -45,10 +47,12 @@ class Admin
 
     public function enqueueScripts()
     {
-        $baseUrl = plugin_dir_url(__FILE__) . '../admin/build/static/js/';
-        $files = scandir(plugin_dir_path(__FILE__) . '../admin/build/static/js');
+        $baseUrl = plugin_dir_url(__FILE__) . self::JS_PATH;
+        $files = scandir(plugin_dir_path(__FILE__) . self::JS_PATH);
         foreach ($files as $file) {
-            if ($file[0] === '.') {
+            $fileInfo = pathinfo($file);
+
+            if ($fileInfo['extension'] !== 'js') {
                 continue;
             }
 
