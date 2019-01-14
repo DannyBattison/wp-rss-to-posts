@@ -58,5 +58,15 @@ class Admin
 
             wp_enqueue_script('rss2posts-' . $file, $baseUrl . $file);
         }
+
+        wp_enqueue_style(
+            'rss2posts-bootstrap',
+            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
+        );
+
+        wp_enqueue_style(
+            'rss2posts-bootstrap-theme',
+            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css'
+        );
     }
 }
