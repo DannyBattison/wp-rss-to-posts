@@ -4,6 +4,8 @@ namespace Danny\WordPress\Rss;
 
 class RssReader
 {
+    const CRON_HOOK = 'rss2posts_import';
+
     /** @var RssReader|null */
     private static $rssReader = null;
 
@@ -40,7 +42,7 @@ class RssReader
      */
     public function registerHooks()
     {
-        add_action('init', [$this, 'checkForPosts']);
+        add_action(self::CRON_HOOK, [$this, 'importPosts']);
     }
 
     /**
@@ -48,7 +50,7 @@ class RssReader
      * @todo: sideload images
      * @todo: abstract out post creation
      */
-    public function checkForPosts()
+    public function importPosts()
     {
         foreach ($this->getFeedUrls() as $feed) {
             $result = $this->feedIo->read($feed);
@@ -79,12 +81,10 @@ class RssReader
                 foreach ($mediaUrls as $mediaUrl) {
                     // magic sideload image returns an HTML image, not an ID
                     $mediaId = media_sideload_image($mediaUrl, $postId, $body, 'id');
-                    var_dump(['postId' => $postId, 'mediaId' => $mediaId]);
                     set_post_thumbnail($postId, $mediaId);
                 }
-                exit;
             }
         }
-        exit;
+        return true;
     }
 }

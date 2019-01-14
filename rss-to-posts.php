@@ -15,4 +15,4 @@ use Danny\WordPress\Rss\RssReader;
 
 $rssReader = RssReader::getInstance();
 
-//$rssReader->registerHooks();
+$rssReader->registerHooks();
