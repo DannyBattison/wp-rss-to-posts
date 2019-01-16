@@ -23,7 +23,7 @@ class RssReader
 
     public function __construct()
     {
-        $this->feedIo = \FeedIo\Factory::create()->getFeedIo();;
+        $this->feedIo = \FeedIo\Factory::create()->getFeedIo();
     }
 
     /**
@@ -48,6 +48,7 @@ class RssReader
     /**
      * @todo: cleaner CDATA handling
      * @todo: sideload images
+     * @todo: use RssItem
      * @todo: abstract out post creation
      */
     public function importPosts()

@@ -20,8 +20,24 @@ class Admin
 
     public function registerHooks()
     {
+        add_action('wp_ajax_rss2posts_readfeed', [$this, 'readFeed']);
+        add_action('wp_ajax_nopriv_rss2posts_readfeed', [$this, 'readFeed']);
         add_action('admin_menu', [$this, 'registerAdminPage']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
+    }
+
+    public function readFeed()
+    {
+        $feedIo = \FeedIo\Factory::create()->getFeedIo();
+        $result = $feedIo->read($_POST['feedUrl']);
+
+        $feedItems = [];
+        foreach ($result->getFeed() as $item) {
+            $feedItems[] = new RssItem($item);
+        }
+
+        echo json_encode($feedItems);
+        wp_die();
     }
 
     public function registerAdminPage()
