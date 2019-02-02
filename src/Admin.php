@@ -5,6 +5,7 @@ namespace Danny\WordPress\Rss;
 class Admin
 {
     const JS_PATH = '../admin/build/static/js/';
+    const OPTION_NAME = 'rss2posts-config';
 
     /** @var RssReader|null */
     private static $adminPage = null;
@@ -21,7 +22,8 @@ class Admin
     public function registerHooks()
     {
         add_action('wp_ajax_rss2posts_readfeed', [$this, 'readFeed']);
-        add_action('wp_ajax_nopriv_rss2posts_readfeed', [$this, 'readFeed']);
+        add_action('wp_ajax_nopriv_rss2posts_readfeed', [$this, 'readFeed']); /** @todo: move out */
+        add_action('wp_ajax_rss2posts_saveconfig', [$this, 'saveConfig']);
         add_action('admin_menu', [$this, 'registerAdminPage']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
     }
@@ -40,6 +42,15 @@ class Admin
         wp_die();
     }
 
+    public function saveConfig()
+    {
+        $jsonData = file_get_contents('php://input');
+
+        update_option(self::OPTION_NAME, $jsonData);
+
+        wp_die();
+    }
+
     public function registerAdminPage()
     {
         add_menu_page(
@@ -55,10 +66,12 @@ class Admin
 
     function adminPage()
     {
-        echo '<div class="wrap">
+        $rssFeeds = get_option(self::OPTION_NAME);
+
+        echo "<div class='wrap'>
                 <h2>RSS to Posts</h2>
-                <div id="rss2posts-admin"></div>
-              </div>';
+                <div id='rss2posts-admin' data-rssFeeds='$rssFeeds'></div>
+              </div>";
     }
 
     public function enqueueScripts()

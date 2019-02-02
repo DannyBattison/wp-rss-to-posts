@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import { FormGroup, ControlLabel, FormControl, HelpBlock, ButtonGroup, Button } from 'react-bootstrap';
 
-/**
- * @todo: proper styling
- */
-
 function FieldGroup({ id, label, help, ...props }) {
   return (
     <FormGroup controlId={id}>
@@ -19,13 +15,13 @@ function FieldGroup({ id, label, help, ...props }) {
 class RssFeed extends Component {
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.handleChange = this.handleChange.bind(this);
     this.changePreview = this.changePreview.bind(this);
 
     this.state = {
-      feedName: '',
-      feedUrl: '',
+      feedName: props.feed.feedName,
+      feedUrl: props.feed.feedUrl,
       feedData: null,
       selectedPreviewKey: null,
     }
@@ -40,6 +36,8 @@ class RssFeed extends Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
+    }, () => {
+      this.props.onChange(this.props.key, this.state);
     });
   };
 
