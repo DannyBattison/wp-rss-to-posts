@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import Rss2Posts from './Rss2Posts';
 
 document.addEventListener('DOMContentLoaded', function() {
