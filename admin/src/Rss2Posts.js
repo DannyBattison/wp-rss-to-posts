@@ -22,6 +22,12 @@ class Rss2Posts extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.state.rssFeeds.length === 0) {
+      this.addFeed();
+    }
+  }
+
   removeFeed() {
     const rssFeeds = this.state.rssFeeds.filter(el => el.key !== this.state.selectedFeed);
     this.state.selectedFeed = rssFeeds.length > 0 ? rssFeeds[0].key : null;
@@ -37,16 +43,21 @@ class Rss2Posts extends Component {
       lastKey = rssFeeds[rssFeeds.length - 1].key;
     }
 
-    rssFeeds.push({
+    const newFeed = {
       key: lastKey + 1,
       feedName: '',
       feedUrl: '',
       postTitle: '%TITLE%',
       postContent: '%CONTENT%',
       postCategories: '%CATEGORIES%',
-    });
+    };
 
-    this.setState({rssFeeds});
+    rssFeeds.push(newFeed);
+
+    this.setState({
+      rssFeeds,
+      selectedFeed: newFeed.key,
+    });
   }
 
   updateFeed(feed) {

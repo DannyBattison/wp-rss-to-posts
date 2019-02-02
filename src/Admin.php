@@ -84,6 +84,10 @@ class Admin
     {
         $rssFeeds = get_option(RssReader::OPTION_NAME_CONFIG);
 
+        if (empty($rssFeeds)) {
+            $rssFeeds = '[]';
+        }
+
         echo "<div class='wrap'>
                 <h2>RSS to Posts</h2>
                 <div id='rss2posts-admin' data-rssFeeds='$rssFeeds'></div>
