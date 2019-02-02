@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
+import { Tab, Row, Col, Nav, NavItem, ButtonGroup, Button } from 'react-bootstrap';
 import RssFeed from './RssFeed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
 
 class Rss2Posts extends Component {
   constructor(props) {
@@ -14,13 +14,17 @@ class Rss2Posts extends Component {
     this.updateFeed = this.updateFeed.bind(this);
     this.saveData = this.saveData.bind(this);
 
+    const feeds = JSON.parse(props.rssFeeds);
+
     this.state = {
-      rssFeeds: JSON.parse(props.rssFeeds),
+      rssFeeds: feeds,
+      selectedFeed: feeds.length > 0 ? feeds[0].key : null,
     };
   }
 
-  removeFeed(feed) {
-    const rssFeeds = this.state.rssFeeds.filter(el => el.key !== feed.key);
+  removeFeed() {
+    const rssFeeds = this.state.rssFeeds.filter(el => el.key !== this.state.selectedFeed);
+    this.state.selectedFeed = rssFeeds.length > 0 ? rssFeeds[0].key : null;
 
     this.setState({rssFeeds});
   }
@@ -72,38 +76,35 @@ class Rss2Posts extends Component {
     const rssFeeds = this.state.rssFeeds;
     return (
       <div className="Rss2Posts">
-        <Tab.Container id="left-tabs-example" defaultActiveKey={rssFeeds.length > 0 ? rssFeeds[0].key : 0}>
+        <Tab.Container
+          id="left-tabs-example"
+          activeKey={this.state.selectedFeed}
+          onSelect={key => this.setState({selectedFeed: key})}
+        >
           <Row>
             <Col sm={12} md={3}>
-              <Row>
-                <Col sm={12}>
-                  <Nav bsStyle="pills" stacked>
-                    {
-                      rssFeeds.map(feed =>
-                        <NavItem eventKey={feed.key}>
-                          {feed.feedName ? feed.feedName : 'New Feed'}
-                        </NavItem>
-                      )
-                    }
-                  </Nav>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={6}>
-                  <div className="text-left">
-                    <Button onClick={this.addFeed}>
-                      <FontAwesomeIcon icon={faPlus} /> Add Feed
-                    </Button>
-                  </div>
-                </Col>
-                <Col sm={6}>
-                  <div className="text-right">
-                    <Button onClick={this.saveData} className={"btn btn-primary"}>
-                      <FontAwesomeIcon icon={faSave} /> Save Feeds
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
+              <Nav bsStyle="pills" stacked>
+                {
+                  rssFeeds.map(feed =>
+                    <NavItem eventKey={feed.key}>
+                      {feed.feedName ? feed.feedName : 'New Feed'}
+                    </NavItem>
+                  )
+                }
+              </Nav>
+              <div className="text-center">
+                <ButtonGroup>
+                  <Button onClick={this.removeFeed} className="btn btn-danger">
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                  <Button onClick={this.addFeed}>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </Button>
+                  <Button onClick={this.saveData} className="btn btn-primary">
+                    <FontAwesomeIcon icon={faSave} />
+                  </Button>
+                </ButtonGroup>
+              </div>
             </Col>
             <Col sm={12} md={9}>
               <Tab.Content animation>
