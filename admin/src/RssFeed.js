@@ -15,6 +15,9 @@ function FieldGroup({ id, label, help, ...props }) {
 class RssFeed extends Component {
   constructor(props) {
     super(props);
+
+    this.abortController = new AbortController();
+
     this.handleChange = this.handleChange.bind(this);
     this.changePreview = this.changePreview.bind(this);
 
@@ -51,17 +54,21 @@ class RssFeed extends Component {
     const params = new URLSearchParams;
     params.append('feedUrl', feedUrl);
 
+    this.abortController.abort();
+    this.abortController = new AbortController();
     fetch('/wp-admin/admin-ajax.php?action=rss2posts_readfeed', {
       method: 'post',
       body: params,
+      signal: this.abortController.signal,
     })
-      .then(res => res.json())
-      .then(feedItems => {
-        this.setState({
-          feedData: feedItems,
-          selectedPreviewKey: 0,
-        });
+    .then(res => res.json())
+    .then(feedItems => {
+      this.setState({
+        feedData: feedItems,
+        selectedPreviewKey: 0,
       });
+    })
+    .catch(err => {});
   }
 
   render() {
