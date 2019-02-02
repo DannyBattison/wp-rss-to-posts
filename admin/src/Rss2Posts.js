@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
 import RssFeed from './RssFeed';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faPlus, faSave } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
 
 class Rss2Posts extends Component {
   constructor(props) {
@@ -19,11 +19,8 @@ class Rss2Posts extends Component {
     };
   }
 
-  removeFeed() {
-    const rssFeeds = this.state.rssFeeds;
-    const index = rssFeeds.findIndex(el => el.key === feed.key);
-
-    rssFeeds.remove(index);
+  removeFeed(feed) {
+    const rssFeeds = this.state.rssFeeds.filter(el => el.key !== feed.key);
 
     this.setState({rssFeeds});
   }
@@ -92,14 +89,14 @@ class Rss2Posts extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col sm={12} md={6}>
+                <Col sm={6}>
                   <div className="text-left">
                     <Button onClick={this.addFeed}>
                       <FontAwesomeIcon icon={faPlus} /> Add Feed
                     </Button>
                   </div>
                 </Col>
-                <Col sm={12} md={6}>
+                <Col sm={6}>
                   <div className="text-right">
                     <Button onClick={this.saveData} className={"btn btn-primary"}>
                       <FontAwesomeIcon icon={faSave} /> Save Feeds
@@ -113,7 +110,7 @@ class Rss2Posts extends Component {
                 {
                   rssFeeds.map((feed) =>
                     <Tab.Pane eventKey={feed.key}>
-                      <RssFeed key={feed.key} feed={feed} onChange={this.updateFeed} onRemove={this.removeFeed}/>
+                      <RssFeed key={feed.key} feed={feed} onChange={this.updateFeed} onDelete={this.removeFeed}/>
                     </Tab.Pane>
                   )
                 }
