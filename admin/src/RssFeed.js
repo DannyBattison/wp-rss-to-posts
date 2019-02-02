@@ -139,7 +139,7 @@ class RssFeed extends Component {
               preview.mediaUrls.length > 0 &&
               <div>
                 <ControlLabel>Image</ControlLabel>
-                <img style={{maxWidth:'400px'}} src={ preview.mediaUrls[0] } />
+                <div><img style={{maxWidth:'400px'}} src={ preview.mediaUrls[0] } /></div>
               </div>
             }
           </div>
