@@ -44,7 +44,7 @@ class Admin
     {
         $jsonData = file_get_contents('php://input');
 
-        update_option(RssReader::OPTION_NAME, $jsonData);
+        update_option(RssReader::OPTION_NAME_CONFIG, $jsonData);
 
         wp_die();
     }
@@ -64,7 +64,7 @@ class Admin
 
     function adminPage()
     {
-        $rssFeeds = get_option(RssReader::OPTION_NAME);
+        $rssFeeds = get_option(RssReader::OPTION_NAME_CONFIG);
 
         echo "<div class='wrap'>
                 <h2>RSS to Posts</h2>

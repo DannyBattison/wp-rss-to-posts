@@ -9,6 +9,8 @@ use FeedIo\Feed\Item;
  */
 class RssItem
 {
+    public $link;
+
     public $mediaUrls;
 
     public $title;
@@ -27,6 +29,8 @@ class RssItem
         foreach ($medias as $media) {
             $this->mediaUrls[] = $media->getUrl();
         }
+
+        $this->link = $item->getLink();
 
         $this->title = trim($item->getTitle());
 
