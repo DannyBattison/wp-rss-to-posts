@@ -33,16 +33,15 @@ class Rss2Posts extends Component {
     this.setState({rssFeeds});
   }
 
-  updateFeed(key, data) {
+  updateFeed(feed) {
     const rssFeeds = this.state.rssFeeds;
-    const index = rssFeeds.findIndex(el => el.key === key);
+    const index = rssFeeds.findIndex(el => el.key === feed.key);
 
     rssFeeds[index] = {
-      key: key,
-      feedName: data.feedName,
-      feedUrl: data.feedUrl,
+      key: feed.key,
+      feedName: feed.feedName,
+      feedUrl: feed.feedUrl,
     };
-    console.log(rssFeeds);
 
     this.setState({rssFeeds});
   }
@@ -68,8 +67,8 @@ class Rss2Posts extends Component {
             <Col sm={4} lg={2}>
               <Nav bsStyle="pills" stacked>
                 {
-                  this.state.rssFeeds.map((feed, key) =>
-                    <NavItem eventKey={key}>{feed.feedName ? feed.feedName : 'New Feed'}</NavItem>
+                  this.state.rssFeeds.map(feed =>
+                    <NavItem eventKey={feed.key}>{feed.feedName ? feed.feedName : 'New Feed'}</NavItem>
                   )
                 }
                 <Button onClick={this.addFeed}>Add Feed</Button>
@@ -79,8 +78,8 @@ class Rss2Posts extends Component {
             <Col sm={8} lg={10}>
               <Tab.Content animation>
                 {
-                  this.state.rssFeeds.map((feed, key) =>
-                    <Tab.Pane eventKey={key}><RssFeed key={key} feed={feed} onChange={this.updateFeed}/></Tab.Pane>
+                  this.state.rssFeeds.map((feed) =>
+                    <Tab.Pane eventKey={feed.key}><RssFeed key={feed.key} feed={feed} onChange={this.updateFeed}/></Tab.Pane>
                   )
                 }
               </Tab.Content>

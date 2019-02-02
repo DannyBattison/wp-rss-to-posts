@@ -15,11 +15,11 @@ function FieldGroup({ id, label, help, ...props }) {
 class RssFeed extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.handleChange = this.handleChange.bind(this);
     this.changePreview = this.changePreview.bind(this);
 
     this.state = {
+      key: props.feed.key,
       feedName: props.feed.feedName,
       feedUrl: props.feed.feedUrl,
       feedData: null,
@@ -37,7 +37,7 @@ class RssFeed extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     }, () => {
-      this.props.onChange(this.props.key, this.state);
+      this.props.onChange(this.state);
     });
   };
 
