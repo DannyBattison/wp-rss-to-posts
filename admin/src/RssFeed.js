@@ -82,7 +82,6 @@ class RssFeed extends Component {
     } catch (e) {
       return false;
     }
-
   }
 
   render() {
