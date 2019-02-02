@@ -25,6 +25,9 @@ class RssFeed extends Component {
       key: props.feed.key,
       feedName: props.feed.feedName,
       feedUrl: props.feed.feedUrl,
+      postTitle: props.feed.postTitle,
+      postContent: props.feed.postContent,
+      postCategories: props.feed.postCategories,
       feedData: null,
       selectedPreviewKey: null,
     }
@@ -109,6 +112,32 @@ class RssFeed extends Component {
         {
           preview &&
           <div>
+            <h3>Import Values:</h3>
+            <span>Available variables: %TITLE%, %CONTENT%, %CATEGORIES%</span>
+            <FieldGroup
+              id="rssPostTitle"
+              name="postTitle"
+              type="text"
+              label="Post Title"
+              onChange={ e => this.handleChange(e) }
+              value={ this.state.postTitle }
+            />
+            <FieldGroup
+              id="rssPostContent"
+              name="postContent"
+              type="text"
+              label="Post Content"
+              onChange={ e => this.handleChange(e) }
+              value={ this.state.postContent }
+            />
+            <FieldGroup
+              id="rssPostCategories"
+              name="postCategories"
+              type="text"
+              label="Post Categories (comma separated)"
+              onChange={ e => this.handleChange(e) }
+              value={ this.state.postCategories }
+            />
             <h3>Item Preview:</h3>
             {
               feedData &&

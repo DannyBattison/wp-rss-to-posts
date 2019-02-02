@@ -35,14 +35,9 @@ class RssReader
     /**
      * @return array
      */
-    public function getFeedUrls()
+    public function getFeeds()
     {
-        return array_map(
-            function($feed) {
-                return $feed->feedUrl;
-            },
-            json_decode(get_option(self::OPTION_NAME_CONFIG))
-        );
+        return json_decode(get_option(self::OPTION_NAME_CONFIG));
     }
 
     public function registerHooks()
@@ -52,10 +47,15 @@ class RssReader
 
     public function importPosts()
     {
+        require_once(ABSPATH . 'wp-admin/includes/taxonomy.php');
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+
         $importedItems = json_decode(get_option(self::OPTION_NAME_HISTORY), true);
 
-        foreach ($this->getFeedUrls() as $feed) {
-            $result = $this->feedIo->read($feed);
+        foreach ($this->getFeeds() as $feed) {
+            $result = $this->feedIo->read($feed->feedUrl);
 
             $feedItems = [];
             $importedCount = 0;
@@ -65,7 +65,7 @@ class RssReader
                 $feedItems[] = $rssItem;
 
                 if (!in_array($rssItem->link, $importedItems)) {
-                    $this->importItem($rssItem);
+                    $this->importItem($rssItem, $feed);
                     $importedItems[] = $rssItem->link;
 
                     if (++$importedCount >= self::MAX_PER_IMPORT) {
@@ -80,19 +80,24 @@ class RssReader
 
     /**
      * @param RssItem $rssItem
+     * @param stdClass $feed
      */
-    private function importItem(RssItem $rssItem)
+    private function importItem(RssItem $rssItem, $feed)
     {
+        $categories = array_map(
+            function ($category) {
+                return \wp_create_category(trim($category));
+            },
+            explode(',', $this->prepareString($rssItem, $feed->postCategories))
+        );
+
         $postId = wp_insert_post([
             'post_date' => $rssItem->created,
-            'post_content' => $rssItem->content,
-            'post_title' => $rssItem->title,
+            'post_title' => $this->prepareString($rssItem, $feed->postTitle),
+            'post_content' => $this->prepareString($rssItem, $feed->postContent),
+            'post_category' => $categories,
             'post_status' => 'publish',
         ], true);
-
-        require_once(ABSPATH . 'wp-admin/includes/media.php');
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
 
         foreach ($rssItem->mediaUrls as $mediaUrl) {
             $mediaId = media_sideload_image($mediaUrl, $postId, $rssItem->content, 'id');
@@ -100,5 +105,19 @@ class RssReader
         }
 
         $importedItems[] = $rssItem->link;
+    }
+
+    /**
+     * @param RssItem $rssItem
+     * @param string $format
+     * @return string
+     */
+    private function prepareString(RssItem $rssItem, $format)
+    {
+        return str_replace(
+            ['%TITLE%', '%CONTENT%', '%CATEGORIES%'],
+            [$rssItem->title, $rssItem->content, implode(',', $rssItem->categories)],
+            $format
+        );
     }
 }

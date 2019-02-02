@@ -41,6 +41,9 @@ class Rss2Posts extends Component {
       key: lastKey + 1,
       feedName: '',
       feedUrl: '',
+      postTitle: '%TITLE%',
+      postContent: '%CONTENT%',
+      postCategories: '%CATEGORIES%',
     });
 
     this.setState({rssFeeds});
@@ -54,6 +57,9 @@ class Rss2Posts extends Component {
       key: feed.key,
       feedName: feed.feedName,
       feedUrl: feed.feedUrl,
+      postTitle: feed.postTitle,
+      postContent: feed.postContent,
+      postCategories: feed.postCategories,
     };
 
     this.setState({rssFeeds});
