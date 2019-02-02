@@ -107,19 +107,19 @@ class RssFeed extends Component {
           value={ this.state.feedUrl }
         />
         {
-          feedData &&
-          <ButtonGroup>
-            {
-              feedData.map(
-                (item, index) => <Button key={index} onClick={e => this.changePreview(index)}>{index + 1}</Button>
-              )
-            }
-          </ButtonGroup>
-        }
-        {
           preview &&
           <div>
             <h3>Item Preview:</h3>
+            {
+              feedData &&
+              <ButtonGroup>
+                {
+                  feedData.map(
+                  (item, index) => <Button key={index} onClick={e => this.changePreview(index)}>{index + 1}</Button>
+                  )
+                }
+              </ButtonGroup>
+            }
             <FieldGroup
               id="rssFeedPreviewTitle"
               label="Title"
