@@ -27,6 +27,9 @@ class RssReader
         return self::$rssReader;
     }
 
+    /**
+     * RssReader constructor.
+     */
     public function __construct()
     {
         $this->feedIo = \FeedIo\Factory::create()->getFeedIo();

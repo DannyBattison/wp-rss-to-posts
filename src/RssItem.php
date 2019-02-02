@@ -9,18 +9,28 @@ use FeedIo\Feed\Item;
  */
 class RssItem
 {
+    /** @var string */
     public $link;
 
+    /** @var string */
     public $mediaUrls;
 
+    /** @var string */
     public $title;
 
+    /** @var string */
     public $content;
 
+    /** @var string */
     public $created;
 
+    /** @var string[] */
     public $categories;
 
+    /**
+     * RssItem constructor.
+     * @param Item $item
+     */
     public function __construct(Item $item)
     {
         $medias = $item->getMedias();

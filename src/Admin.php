@@ -6,9 +6,12 @@ class Admin
 {
     const JS_PATH = '../admin/build/static/js/';
 
-    /** @var RssReader|null */
+    /** @var Admin|null */
     private static $adminPage = null;
 
+    /**
+     * @return Admin
+     */
     public static function getInstance()
     {
         if (self::$adminPage === null) {
@@ -18,6 +21,9 @@ class Admin
         return self::$adminPage;
     }
 
+    /**
+     * Register WordPress hooks
+     */
     public function registerHooks()
     {
         add_action('wp_ajax_rss2posts_readfeed', [$this, 'readFeed']);
@@ -26,6 +32,9 @@ class Admin
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
     }
 
+    /**
+     * Read a feed for admin preview
+     */
     public function readFeed()
     {
         $feedIo = \FeedIo\Factory::create()->getFeedIo();
@@ -40,6 +49,9 @@ class Admin
         wp_die();
     }
 
+    /**
+     * Save config to database
+     */
     public function saveConfig()
     {
         $jsonData = file_get_contents('php://input');
@@ -49,6 +61,9 @@ class Admin
         wp_die();
     }
 
+    /**
+     * Register the WordPress admin page
+     */
     public function registerAdminPage()
     {
         add_menu_page(
@@ -62,6 +77,9 @@ class Admin
         );
     }
 
+    /**
+     * Output the admin page
+     */
     function adminPage()
     {
         $rssFeeds = get_option(RssReader::OPTION_NAME_CONFIG);
@@ -72,6 +90,9 @@ class Admin
               </div>";
     }
 
+    /**
+     * Enqueue admin styles and scripts
+     */
     public function enqueueScripts()
     {
         $baseUrl = plugin_dir_url(__FILE__) . self::JS_PATH;
