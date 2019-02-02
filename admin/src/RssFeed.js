@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import { FormGroup, ControlLabel, FormControl, HelpBlock, ButtonGroup, Button } from 'react-bootstrap';
 
 function FieldGroup({ id, label, help, ...props }) {

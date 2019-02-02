@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
-import { Tab, Row, Col, Nav, NavItem, ButtonGroup, Button } from 'react-bootstrap';
+import { Tab, Row, Col, Nav, NavItem, ButtonGroup, Button, Alert } from 'react-bootstrap';
 import RssFeed from './RssFeed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +18,7 @@ class Rss2Posts extends Component {
     this.state = {
       rssFeeds: feeds,
       selectedFeed: feeds.length > 0 ? feeds[0].key : null,
+      showSuccessMessage: false,
     };
   }
 
@@ -75,7 +75,12 @@ class Rss2Posts extends Component {
         },
         body: JSON.stringify(this.state.rssFeeds),
       }
-    );
+    )
+      .then(() => {
+        this.setState({showSuccessMessage: true}, () => setTimeout(() => {
+          this.setState({showSuccessMessage: false});
+        }, 5000));
+      });
   }
 
   render() {
@@ -111,6 +116,12 @@ class Rss2Posts extends Component {
                   </Button>
                 </ButtonGroup>
               </div>
+              {
+                this.state.showSuccessMessage &&
+                <Alert variant='success' className="text-center">
+                  Successfully updated RSS to Posts settings
+                </Alert>
+              }
             </Col>
             <Col sm={12} md={9}>
               <Tab.Content animation>
