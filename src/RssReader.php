@@ -5,6 +5,7 @@ namespace Danny\WordPress\Rss;
 class RssReader
 {
     const CRON_HOOK = 'rss2posts_import';
+    const OPTION_NAME = 'rss2posts-config';
 
     /** @var RssReader|null */
     private static $rssReader = null;
@@ -27,19 +28,18 @@ class RssReader
     }
 
     /**
-     * @todo: make settings page
      * @return array
      */
     public function getFeedUrls()
     {
-        return [
-            'https://queryfeed.net/instagram?q=capnhammered',
-        ];
+        return array_map(
+            function($feed) {
+                return $feed->feedUrl;
+            },
+            json_decode(get_option(self::OPTION_NAME))
+        );
     }
 
-    /**
-     * @todo: register hooks
-     */
     public function registerHooks()
     {
         add_action(self::CRON_HOOK, [$this, 'importPosts']);
