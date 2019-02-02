@@ -30,6 +30,10 @@ class RssFeed extends Component {
     }
   }
 
+  componentDidMount() {
+    this.loadFeed();
+  }
+
   componentDidUpdate(oldProps, oldState) {
     if (this.state.feedUrl !== oldState.feedUrl) {
       this.loadFeed();
@@ -49,26 +53,36 @@ class RssFeed extends Component {
   }
 
   loadFeed() {
-    const feedUrl = this.state.feedUrl;
-
-    const params = new URLSearchParams;
-    params.append('feedUrl', feedUrl);
-
-    this.abortController.abort();
-    this.abortController = new AbortController();
-    fetch('/wp-admin/admin-ajax.php?action=rss2posts_readfeed', {
-      method: 'post',
-      body: params,
-      signal: this.abortController.signal,
-    })
-    .then(res => res.json())
-    .then(feedItems => {
+    try {
       this.setState({
-        feedData: feedItems,
-        selectedPreviewKey: 0,
+        feedData: null,
+        selectedPreviewKey: null,
       });
-    })
-    .catch(err => {});
+
+      const url = new URL(this.state.feedUrl);
+
+      const params = new URLSearchParams;
+      params.append('feedUrl', url.href);
+
+      this.abortController.abort();
+      this.abortController = new AbortController();
+      fetch('/wp-admin/admin-ajax.php?action=rss2posts_readfeed', {
+        method: 'post',
+        body: params,
+        signal: this.abortController.signal,
+      })
+      .then(res => res.json())
+      .then(feedItems => {
+        this.setState({
+          feedData: feedItems,
+          selectedPreviewKey: 0,
+        });
+      })
+      .catch(err => {});
+    } catch (e) {
+      return false;
+    }
+
   }
 
   render() {
@@ -129,6 +143,10 @@ class RssFeed extends Component {
               </div>
             }
           </div>
+        }
+        {
+          !preview &&
+          <div>A preview of your feed will appear here</div>
         }
       </div>
     );
