@@ -1,6 +1,6 @@
 === RSS to Posts ===
 Contributors: CapnHammered
-Tags: rss, import, posts
+Tags: rss, import, posts, autoblog, feed to post
 Requires at least: 4.0
 Tested up to: 5.1
 Requires PHP: 5.6
