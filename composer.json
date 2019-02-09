@@ -1,6 +1,6 @@
 {
     "require": {
-        "debril/feed-io": "^4.3"
+        "debril/feed-io": "^3"
     },
     "autoload": {
         "psr-4": { "Danny\\WordPress\\Rss\\": "src/" }
