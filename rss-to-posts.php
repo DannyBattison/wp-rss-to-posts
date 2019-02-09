@@ -3,7 +3,7 @@
 	Plugin Name: RSS to Posts
 	Plugin URI: https://danny.gg/rss-to-posts-wordpress-plugin/
 	Description: Imports posts from an RSS feed into WordPress posts.
-	Version: 1.0
+	Version: 1.0.4
 	Author: Danny Battison
 	Author URI: https://danny.gg
 	License: GPL2
