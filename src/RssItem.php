@@ -33,6 +33,7 @@ class RssItem
      */
     public function __construct(Item $item)
     {
+
         $medias = $item->getMedias();
         $this->mediaUrls = [];
         /** @var \FeedIo\Feed\Item\Media $media */
@@ -46,6 +47,18 @@ class RssItem
 
         $this->content = trim(str_replace(['<![CDATA[', ']]>'], ['', ''], $item->getDescription()));
 
+        // Explore possible elements of content
+        foreach ( $item->getAllElements() as $element) {
+
+            switch ( $element->getName() ) {
+                case 'content:encoded':
+                case 'content':
+                    $this->content = trim(str_replace(['<![CDATA[', ']]>'], ['', ''], $element->getValue() ));
+                    break;
+            }
+
+        }
+
         $this->created = $item->getLastModified()->format('Y-m-d H:i:s');
 
         $itemCategories = $item->getCategories();
@@ -55,5 +68,6 @@ class RssItem
         foreach ($itemCategories as $category) {
             $this->categories[] = $category->getTerm();
         }
+
     }
 }
